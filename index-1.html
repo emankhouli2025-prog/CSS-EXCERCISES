@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تمارين CSS - الجزء الأول: أنواع CSS</title>
+<style>
+:root{--bg:#eef7f6;--surface:#fff;--surface2:#e6f3f1;--ink:#102a2b;--muted:#53706e;--line:#c7ddd9;--primary:#0f766e;--blue:#0369a1;--code-bg:#0b1e24;--code-ink:#e8f8f3}
+@media (prefers-color-scheme:dark){:root{--bg:#071614;--surface:#102725;--surface2:#173431;--ink:#edfbf8;--muted:#a9c4c0;--line:#2a4a45;--primary:#2dd4bf;--blue:#38bdf8;--code-bg:#050f13;--code-ink:#d9f7ee}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo','Tajawal',Tahoma,system-ui,sans-serif;line-height:1.8}
+main{max-width:1000px;margin:0 auto;padding:16px 16px 64px}
+header.top{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--line);padding:10px 16px}
+header.top div{max-width:1000px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+header.top small{color:var(--primary);font-weight:700;display:block}
+header.top h1{margin:0;font-size:1.1rem}
+.hero{background:var(--primary);color:#fff;border-radius:24px;padding:24px;margin-top:16px}
+.hero h2{margin:8px 0;font-size:1.9rem;line-height:1.3}
+.hero p{margin:0;opacity:.95}
+.badge{display:inline-block;background:rgba(255,255,255,.18);border-radius:99px;padding:2px 12px;font-size:.8rem;font-weight:700}
+nav{display:flex;gap:8px;overflow-x:auto;margin:20px 0;padding-bottom:4px}
+nav a{flex-shrink:0;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:8px 16px;font-weight:800;font-size:.9rem}
+.types{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px}
+.card h3{margin:0 0 6px}
+h2.sec{font-size:1.6rem;margin:40px 0 4px}
+p.sub{color:var(--muted);margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.num{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--surface2);font-weight:900}
+.q{font-weight:800;font-size:1.05rem;margin:10px 0}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts button,.btn{font:inherit;font-weight:800;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:8px 16px;cursor:pointer}
+.opts button.sel{border-color:var(--primary);background:var(--surface2);color:var(--primary)}
+.opts.tf button{flex:1}
+.opts.col{flex-direction:column}
+.opts.col button{text-align:right}
+pre{direction:ltr;text-align:left;background:var(--code-bg);color:var(--code-ink);border-radius:14px;padding:12px;overflow-x:auto;white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem;line-height:1.7;margin:8px 0}
+code,.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.task{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;margin-bottom:18px}
+.task .h{background:var(--surface2);padding:12px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{background:var(--primary);color:var(--bg);border-radius:99px;padding:2px 12px;font-size:.8rem;font-weight:900}
+.task .b{padding:18px}
+.preview{border:1px dashed var(--line);border-radius:14px;padding:10px 14px;margin:12px 0}
+.preview p{margin:0;font-size:1.5rem;font-weight:900}
+textarea{width:100%;direction:ltr;text-align:left;border:1px solid var(--line);border-radius:14px;padding:12px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;background:#fff;color:#102a2b;resize:vertical;white-space:pre}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn.blue{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.green{background:var(--primary);border-color:var(--primary);color:var(--bg)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.status{font-size:.9rem;color:var(--muted);font-weight:700;min-height:1.5em}
+iframe{width:100%;height:180px;border:1px solid var(--line);border-radius:14px;background:#fff;margin-top:8px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.note{background:var(--surface2);border-radius:12px;padding:10px;font-weight:700;margin-top:8px}
+.key{margin-top:48px;border:2px solid var(--primary);border-radius:24px;padding:24px;text-align:center;background:var(--surface)}
+.key .btn{background:var(--primary);color:var(--bg);border-color:var(--primary);padding:12px 24px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);overflow-y:auto;padding:16px;display:none;z-index:50}
+.modal.open{display:block}
+.modal .in{max-width:760px;margin:auto;background:var(--surface);border-radius:24px;padding:20px}
+.modal h3.s{background:var(--surface2);border-radius:14px;padding:8px 14px;margin:20px 0 8px}
+.modal li{border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:8px;list-style:none}
+.modal ol{padding:0;margin:0}
+.modal .a{font-weight:900;margin:4px 0 0}
+.modal .w{color:var(--muted);font-weight:700;font-size:.9rem}
+footer{margin-top:40px;background:#102a2b;color:#d5f5ee;border-radius:20px;padding:18px;font-size:.9rem}
+</style>
+</head>
+<body>
+<header class="top"><div>
+  <div><small>تطوير الويب • الصف الحادي عشر</small><h1>تمارين CSS - الجزء الأول: أنواع CSS</h1></div>
+  <button class="btn" id="resetBtn">إعادة</button>
+</div></header>
+
+<main>
+<section class="hero">
+  <span class="badge">الكتاب المدرسي • الصفحات 43 - 46</span>
+  <h2>متى نستخدم كل نوع من CSS؟</h2>
+  <p>اختبر نفسك - اكتب حلك وجربه. (21 سؤالًا: 10 + 5 + 6)</p>
+</section>
+
+<nav>
+  <a href="#s1">صح أو خطأ</a><a href="#s2">اكتشف الخطأ</a><a href="#s3">أكمِل الكود</a><a href="#s4">اكتب الكود</a><a href="#saved">حلولك المحفوظة</a>
+</nav>
+
+<h2 class="sec" style="margin-top:0">ثلاث طرق، ولكل طريقة مكانها</h2>
+<div class="types">
+  <div class="card"><h3 style="color:#0f766e">Inline</h3><p>التنسيق يُكتب داخل وسم البداية للعنصر، ويؤثر فيه فقط.</p><pre>&lt;h1 style="color:red;"&gt;</pre></div>
+  <div class="card"><h3 style="color:#0369a1">Internal</h3><p>التنسيق يُكتب داخل وسم style في head، ويؤثر في هذه الصفحة.</p><pre>&lt;style&gt; h1 { … } &lt;/style&gt;</pre></div>
+  <div class="card"><h3 style="color:#b45309">External</h3><p>التنسيق في ملف .css مستقل، ويُربط بعدة صفحات بعنصر link.</p><pre>&lt;link href="style.css"&gt;</pre></div>
+</div>
+
+<section id="s1"><h2 class="sec">01 — ضع علامة صح أو خطأ</h2><p class="sub">اقرأ الجملة، ثم اختر صح أو خطأ.</p><div class="grid" id="tf"></div></section>
+<section id="s2"><h2 class="sec">02 — اكتشف الخطأ البرمجي</h2><p class="sub">انظر إلى الكود، ثم اختر الخطأ.</p><div id="err"></div></section>
+<section id="s3"><h2 class="sec">03 — أكمِل الكود</h2><p class="sub">اختر الكلمة الصحيحة لإكمال الكود.</p><div class="grid" id="fill"></div></section>
+<section id="s4"><h2 class="sec">04 — اكتب الكود</h2><p class="sub">اكتب حلك وجربه، ثم احفظه (يُحفظ في هذا المتصفح).</p><div id="code"></div></section>
+<section id="saved"><h2 class="sec">05 — حلولك المحفوظة</h2><p class="sub" id="savedCount"></p><div id="savedList"></div></section>
+
+<section class="key">
+  <h2 style="margin-top:0">انتهيت؟ راجع بنفسك</h2>
+  <p class="sub">أنهِ إجاباتك أولًا، ثم افتح مفتاح الإجابة وقارن بنفسك.</p>
+  <button class="btn" id="keyBtn">🔑 راجع إجاباتك بنفسك</button>
+</section>
+
+<footer>ورقة عمل مناسبة لطلبة الصف الحادي عشر - مبحث تطوير الويب، الجزء الأول: أنواع CSS. تستند إلى الكتاب المدرسي، الصفحات 43 - 46.</footer>
+</main>
+
+<div class="modal" id="modal"><div class="in">
+  <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
+    <div><b style="color:var(--primary)">🔑 مفتاح الإجابة</b><h2 style="margin:4px 0">راجع إجاباتك بنفسك</h2>
+    <p class="sub">قارن كل إجابة اخترتها بالإجابة هنا، وفكّر: لماذا هذه هي الإجابة؟ لا تُحسب أي علامة تلقائيًا.</p></div>
+    <button class="btn" id="closeBtn">إغلاق</button>
+  </div>
+  <div id="keyBody"></div>
+  <button class="btn green" style="width:100%;margin-top:16px" id="closeBtn2">أغلق المفتاح وارجع لورقتك</button>
+</div></div>
+
+<script>
+var TF=[
+["تُكتب أكواد Inline داخل وسم style في منطقة head.",false,"أكواد Inline تُكتب في وسم البداية للعنصر نفسه، من خلال خاصية style."],
+["تُستخدم خاصية style لكتابة Inline CSS.",true,'نكتب مثل: <h1 style="color:red;"> فتؤثر التنسيقات في هذا العنصر فقط.'],
+["طريقة Internal مناسبة للمواقع ذات العدد المحدود من الصفحات.",true,"لأن أكوادها تُكتب داخل كل صفحة، فهي عملية عندما يكون عدد الصفحات قليلًا."],
+["في طريقة Internal تُكتب أكواد CSS داخل العنصر link.",false,"تُكتب أكواد Internal داخل وسم style في منطقة head، وليس داخل link."],
+["ملف External امتداده .css.",true,"مثل: style.css، وهو ملف مستقل يحتوي أكواد CSS فقط."],
+["لربط ملف External نستخدم العنصر link داخل head.",true,'نكتب مثل: <link rel="stylesheet" href="style.css"> داخل head.'],
+["طريقة Inline هي الأفضل للمواقع الكبيرة لأنها توفّر الوقت.",false,"في المواقع الكبيرة سيتكرر الكود في كل عنصر، لذلك External أوفر وقتًا وجهدًا."],
+["تغيير محتوى ملف style.css واحد يغيّر شكل عدة صفحات مرتبطة به.",true,"هذه أقوى ميزة في External: تعديل واحد ينعكس على كل الصفحات المرتبطة."],
+["في External يجب أن يحتوي ملف CSS على أكواد HTML.",false,"ملف CSS يحتوي أكواد تنسيق فقط، ولا نضع فيه وسوم HTML مثل html أو head أو body."],
+['الكود <body style="background-color:blue;"> مثال على Inline.',true,"التنسيق مكتوب داخل وسم البداية للعنصر body نفسه، وهذا هو Inline."]
+];
+var ERR=[
+["الكود الأول — أين الخطأ؟",'<h1 style="color: green font-size:200%">القدس</h1>',["اسم العنصر h1 خاطئ","نقص فاصلة منقوطة ; بين الخاصيتين","نقص وسم الإغلاق </h1>"],1,"يجب الفصل بين كل خاصيتين بفاصلة منقوطة: color: green; font-size: 200%;"],
+["الكود الثاني — أين الخطأ؟","<style>\nh1 { color: blue;\n</style>",["نقص فاصلة منقوطة بعد blue","يجب كتابة h1 بحروف كبيرة","نقص قوس الإغلاق }"],2,"كل قاعدة تحتاج قوس فتح { وقوس إغلاق }. هنا نقص } قبل إغلاق style."],
+["الكود الثالث — أين الخطأ؟",'<body>\n  <link rel="stylesheet" href="style.css">\n  <h1>القدس</h1>\n</body>',["العنصر link يجب أن يكون داخل head","اسم الملف يجب أن يكون بدون .css","الخاصية rel يجب حذفها"],0,"عنصر link الخاص بربط ملف CSS يوضع داخل head، وليس داخل body."],
+["الكود الرابع — أين الخطأ؟","<h1 style=color:red>رام الله</h1>",["كلمة red يجب أن تكون بالعربية",'نقص علامتا تنصيص " " حول قيمة style',"العنصر h1 لا يقبل خاصية style"],1,'الصحيح: style="color:red" — قيمة الخاصية توضع بين علامتي تنصيص.'],
+["الكود الخامس — أين الخطأ؟","/* داخل ملف style.css */\n<html>\n  <h1>بيت لحم</h1>\n</html>",["ملف CSS يجب أن ينتهي بـ .html","يجب وضع style.css داخل وسم head","ملف CSS يجب ألا يحتوي وسوم HTML"],2,"ملف style.css يحتوي قواعد CSS فقط، مثل: h1 { color: green; }"]
+];
+var FILL=[
+["أكمِل التنسيق الداخلي Inline",'<h1 style="____: red;">القدس</h1>',["text","colour","color"],"color","خاصية color تحدد لون النص."],
+["أكمِل التنسيق الداخلي Internal","<___>\n  h1 { color: blue; }\n</___>",["style","link","css"],"style","أكواد Internal تُكتب داخل وسم style في head."],
+["أكمِل ربط الملف الخارجي",'<link rel="_____" href="style.css">',["style","cssfile","stylesheet"],"stylesheet","قيمة rel تكون stylesheet لأننا نربط ورقة أنماط."],
+["أكمِل لون خلفية الصفحة",'<body style="background-_____: blue;">',["image","page","color"],"color","الخاصية الكاملة هي background-color."],
+["أكمِل نوع الخط داخل ملف style.css","h1 {\n  _____: Tahoma;\n}",["font-size","font-family","font-color"],"font-family","خاصية font-family تحدد نوع الخط."],
+["أكمِل ربط الملف في head",'<link rel="stylesheet" type="text/css" ____="style.css">',["src","link","href"],"href","في العنصر link نستخدم href لتحديد مسار الملف، بينما src تُستخدم مع وسوم أخرى مثل img."]
+];
+var TASKS=[
+{tag:"Inline",title:"ثلاثة عناوين بألوان مختلفة",task:"باستخدام Inline، أنشئ ثلاثة عناوين للمدن: القدس، ورام الله، وبيت لحم. اجعل ألوانها: أخضر، وأحمر، وبنفسجي، وحجم الخط 200% لكل عنوان.",
+ sol:'<h1 style="color: green; font-size: 200%;">القدس</h1>\n<h1 style="color: red; font-size: 200%;">رام الله</h1>\n<h1 style="color: purple; font-size: 200%;">بيت لحم</h1>',
+ note:"كل تنسيق مكتوب داخل العنصر نفسه، ولا يؤثر في غيره.",
+ prev:[["القدس","#15803d"],["رام الله","#dc2626"],["بيت لحم","#7e22ce"]],
+ starter:'<h1 style="color: green; font-size: 200%;">القدس</h1>\n'},
+{tag:"Internal",title:"عناوين بمستويات وألوان مختلفة",task:"باستخدام Internal، نسّق العناوين h1 و h2 و h3 للمدن: عكا، ونابلس، وحيفا. اختر لكل عنوان لونًا مختلفًا، واجعل حجم الخط 35px للعناوين الثلاثة.",
+ sol:'<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    h1 { color: blue; font-size: 35px; }\n    h2 { color: orange; font-size: 35px; }\n    h3 { color: green; font-size: 35px; }\n  </style>\n</head>\n<body>\n  <h1>عكا</h1>\n  <h2>نابلس</h2>\n  <h3>حيفا</h3>\n</body>\n</html>',
+ note:"كل الأكواد داخل وسم style في head، وتؤثر في هذه الصفحة فقط.",
+ prev:[["عكا","#2563eb"],["نابلس","#ea580c"],["حيفا","#15803d"]],
+ starter:'<style>\n  h1 { color: blue; font-size: 35px; }\n</style>\n<h1>عكا</h1>\n'},
+{tag:"External",title:"ملف تنسيق واحد لثلاث مدن",task:"باستخدام External، أنشئ ملف style.css ونسّق فيه العناوين للمدن: القدس، ورام الله، وبيت لحم بالألوان: peru، و purple، و greenyellow. ثم اربط الملف في صفحة HTML.",
+ sol:'/* ملف style.css */\nh1 { color: peru; }\nh2 { color: purple; }\nh3 { color: greenyellow; }\n\n<!-- داخل head في ملف HTML -->\n<link rel="stylesheet" href="style.css">',
+ note:"ملف CSS لا يحتوي وسوم HTML. تعديله يغيّر كل الصفحات المرتبطة به.",
+ prev:[["القدس","#cd853f"],["رام الله","#7e22ce"],["بيت لحم","#65a30d"]],
+ starter:'/* ملف style.css */\nh1 { color: peru; }\n'}
+];
+
+var $=function(id){return document.getElementById(id)};
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function store(k,v){try{if(v===undefined){var r=localStorage.getItem(k);return r?JSON.parse(r):null}localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+
+function choiceGroup(container,labels,cls,onPick){
+  var wrap=el("div","opts "+cls);
+  labels.forEach(function(l,i){
+    var b=el("button",null,l);b.type="button";
+    b.addEventListener("click",function(){
+      Array.prototype.forEach.call(wrap.children,function(c){c.classList.remove("sel")});
+      b.classList.add("sel");if(onPick)onPick(i);
+    });
+    wrap.appendChild(b);
+  });
+  container.appendChild(wrap);
+}
+
+TF.forEach(function(q,i){
+  var c=el("article","card");
+  c.appendChild(el("span","num",i+1));
+  c.appendChild(el("p","q",q[0]));
+  choiceGroup(c,["صح","خطأ"],"tf");
+  $("tf").appendChild(c);
+});
+ERR.forEach(function(q,i){
+  var c=el("article","card");c.style.marginBottom="14px";
+  c.appendChild(el("h3",null,(i+1)+". "+q[0]));
+  c.appendChild(el("pre",null,q[1]));
+  choiceGroup(c,q[2],"col");
+  $("err").appendChild(c);
+});
+FILL.forEach(function(q,i){
+  var c=el("article","card");
+  c.appendChild(el("h3",null,(i+1)+". "+q[0]));
+  c.appendChild(el("pre",null,q[1]));
+  choiceGroup(c,q[2],"mono");
+  $("fill").appendChild(c);
+});
+
+var drafts=store("css-drafts")||{};
+var tas=[];
+TASKS.forEach(function(t,i){
+  var d=el("article","task");
+  var h=el("div","h");h.appendChild(el("span","tag",t.tag));h.appendChild(el("b",null,"المهمة "+(i+1)+": "+t.title));
+  var b=el("div","b");
+  b.appendChild(el("p",null,t.task));
+  var pv=el("div","preview");pv.appendChild(el("small",null,"معاينة النتيجة المتوقعة"));
+  t.prev.forEach(function(p){var x=el("p",null,p[0]);x.style.color=p[1];pv.appendChild(x)});
+  b.appendChild(pv);
+  b.appendChild(el("b",null,"✏️ اكتب حلك هنا"));
+  var ta=document.createElement("textarea");ta.rows=9;ta.placeholder=t.starter;ta.value=drafts[i]||"";
+  tas.push(ta);b.appendChild(ta);
+  var bt=el("div","btns");
+  var run=el("button","btn blue","▶ جرّب حلك وشوف النتيجة");
+  var save=el("button","btn green","💾 احفظ حلك");
+  var cmp=el("button","btn","قارن مع الحل النموذجي");
+  var shw=el("button","btn","عرض الحل النموذجي");
+  [run,save,cmp,shw].forEach(function(x){x.type="button";bt.appendChild(x)});
+  b.appendChild(bt);
+  var st=el("p","status");b.appendChild(st);
+  var out=el("div");b.appendChild(out);
+  var cmpBox=el("div");b.appendChild(cmpBox);
+  var solBox=el("div");b.appendChild(solBox);
+
+  run.onclick=function(){
+    out.textContent="";
+    var f=document.createElement("iframe");f.setAttribute("sandbox","");
+    f.srcdoc='<!DOCTYPE html><html dir="rtl"><body style="font-family:Tahoma,sans-serif">'+ta.value+'</body></html>';
+    out.appendChild(f);
+  };
+  save.onclick=function(){
+    if(!ta.value.trim()){st.textContent="اكتب شيئًا أولًا ثم احفظ حلك.";return}
+    drafts[i]=ta.value;store("css-drafts",drafts);st.textContent="تم حفظ حلك ✓";renderSaved();
+  };
+  cmp.onclick=function(){
+    if(cmpBox.firstChild){cmpBox.textContent="";cmp.textContent="قارن مع الحل النموذجي";return}
+    cmp.textContent="إخفاء المقارنة";
+    var g=el("div","two");
+    var a=el("div");a.appendChild(el("b",null,"حلك أنت"));a.appendChild(el("pre",null,ta.value||"— لم تكتب شيئًا بعد —"));
+    var s=el("div");s.appendChild(el("b",null,"الحل النموذجي"));s.appendChild(el("pre",null,t.sol));
+    g.appendChild(a);g.appendChild(s);cmpBox.appendChild(g);cmpBox.appendChild(el("p","note","💡 "+t.note));
+  };
+  shw.onclick=function(){
+    if(solBox.firstChild){solBox.textContent="";shw.textContent="عرض الحل النموذجي";return}
+    shw.textContent="إخفاء الحل النموذجي";solBox.appendChild(el("pre",null,t.sol));
+  };
+  d.appendChild(h);d.appendChild(b);$("code").appendChild(d);
+});
+
+function renderSaved(){
+  var box=$("savedList");box.textContent="";var n=0;
+  TASKS.forEach(function(t,i){
+    if(!drafts[i])return;n++;
+    var c=el("article","card");c.style.marginBottom="12px";
+    c.appendChild(el("h3",null,"المهمة "+(i+1)+": "+t.title+" ✓"));
+    c.appendChild(el("pre",null,drafts[i]));
+    var f=document.createElement("iframe");f.setAttribute("sandbox","");
+    f.srcdoc='<!DOCTYPE html><html dir="rtl"><body style="font-family:Tahoma,sans-serif">'+drafts[i]+'</body></html>';
+    c.appendChild(f);box.appendChild(c);
+  });
+  $("savedCount").textContent=n?(n+" من 3 محفوظة"):"لم تحفظ أي حل بعد. اكتب حلك في الأعلى واضغط «احفظ حلك».";
+}
+renderSaved();
+
+$("resetBtn").onclick=function(){
+  document.querySelectorAll(".opts button.sel").forEach(function(b){b.classList.remove("sel")});
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+// answer key
+(function(){
+  var k=$("keyBody");
+  function sec(title){k.appendChild(el("h3","s",title));var o=el("ol");k.appendChild(o);return o}
+  function li(o,i,q,ans,why,ltr){
+    var x=el("li");x.appendChild(el("b",null,(i+1)+". "+q));
+    var a=el("p","a","الإجابة: "+ans);if(ltr){a.style.direction="ltr";a.style.textAlign="left";a.className+=" mono"}
+    x.appendChild(a);x.appendChild(el("p","w",why));o.appendChild(x);
+  }
+  var o1=sec("القسم الأول — صح أو خطأ");TF.forEach(function(q,i){li(o1,i,q[0],q[1]?"صح":"خطأ",q[2])});
+  var o2=sec("القسم الثاني — اكتشف الخطأ");ERR.forEach(function(q,i){li(o2,i,q[0],q[2][q[3]],q[4])});
+  var o3=sec("القسم الثالث — أكمِل الكود");FILL.forEach(function(q,i){li(o3,i,q[0],q[3],q[4],true)});
+})();
+function setModal(v){$("modal").classList.toggle("open",v)}
+$("keyBtn").onclick=function(){setModal(true)};
+$("closeBtn").onclick=$("closeBtn2").onclick=function(){setModal(false)};
+</script>
+</body>
+</html>
